@@ -1,0 +1,75 @@
+<div class="container">
+  <mat-toolbar color="primary" class="main-toolbar" style="position: fixed; z-index: 999;">
+    <span>Audio Player</span>
+
+    <span class="spacer"></span>
+    <!-- <span class="toolbar-btn" *ngIf="!auth.authenticated" (click)="auth.login()">LOGIN </span>
+    <span class="toolbar-btn" *ngIf="auth.authenticated" (click)="auth.logout()">LOGOUT</span>
+    <span class="toolbar-btn" *ngIf="auth.authenticated" routerLink="/profile">PROFILE</span> -->
+  </mat-toolbar>
+  <br>
+  <br>
+  <br>
+  <div class="content">
+    <!-- <div class="logo" *ngIf="currentFile.file">
+      <mat-icon><img src="{{currentFile.file.image}}" width="100px"></mat-icon>
+      <div>{{currentFile.file.name}}</div>
+    </div> -->
+
+    <mat-list color="primary" style="overflow: scroll;margin-bottom: 118px">
+      <h3 mat-subheader>Songs</h3>
+      <mat-list-item *ngFor="let file of files; let i = index" (click)="openFile(file, i)" style="cursor: pointer">
+
+        <mat-icon color="primary" mat-list-icon style="width: 50px"> <img src="{{file.image}}" style=" 
+          margin-top: -11px;
+          border-radius: 86px;
+          height: 56px;
+          width: 56px;"></mat-icon>
+        <h4 mat-line>{{ file.name }}</h4>
+        <h5 mat-line class="grey-text"> {{ file.artist }}</h5>
+        <!-- <mat-icon color="primary" *ngIf="currentFile.index === i && !state?.error">volume_up</mat-icon> -->
+        <img *ngIf="currentFile.index === i && !state?.error && state.playing"
+          src="https://loading.io/spinners/equalizer/lg.equalizer-bars-loader.gif" width="80px">
+        <img *ngIf="currentFile.index === i && !state?.error && !state.playing"
+          src="http://pngimages.net/sites/default/files/equalizer-png-image-99095.png" width="38px">
+        <h6 *ngIf="currentFile.index === i && state?.error">ERROR</h6>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <br>
+  <div class="media-footer" *ngIf="currentFile.file" style="position: fixed!important">
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        {{ state?.readableCurrentTime }}
+        <mat-slider class="time-slider" min="0" [max]="state?.duration" step="1" [value]="state?.currentTime"
+          (input)="onSliderChangeEnd($event)" [disabled]="state?.error || currentFile.index === undefined"></mat-slider>
+        {{ state?.readableDuration }}
+      </mat-toolbar-row>
+
+      <mat-toolbar-row class="media-action-bar">
+        <mat-icon><img src="{{currentFile.file.image}}" style="    margin-left: -21px;
+          margin-top: -5px;
+          border-radius: 86px;
+          height: 56px;
+          width: 56px;"></mat-icon>
+
+        <button mat-button [disabled]="isFirstPlaying()" (click)="previous()">
+          <mat-icon mat-list-icon>skip_previous</mat-icon>
+        </button>
+
+        <button mat-button (click)="play()" [disabled]="state?.error" *ngIf="!state?.playing">
+          <mat-icon mat-list-icon>play_circle_filled</mat-icon>
+        </button>
+
+        <button mat-button (click)="pause()" *ngIf="state?.playing">
+          <mat-icon mat-list-icon>pause</mat-icon>
+        </button>
+
+        <button mat-button [disabled]="isLastPlaying()" (click)="next()">
+          <mat-icon mat-list-icon>skip_next</mat-icon>
+        </button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
+</div>
